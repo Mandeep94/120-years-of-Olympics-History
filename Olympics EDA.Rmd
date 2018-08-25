@@ -1,0 +1,183 @@
+---
+title: "Olympics EDA"
+output:
+  pdf_document: default
+  html_notebook: default
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: console
+---
+
+In this file we are going to explore the data and find out the insights in our 
+data.
+
+```{r echo=FALSE, warning=FALSE}
+
+library(ggplot2)
+#library(gridExtra)
+library(dplyr)
+#library(alr3)
+#library(reshape2)
+#library(GGally)
+#library(scales)
+#library(memisc)
+#library(lattice)
+#library(MASS)
+#library(car)
+#library(RColorBrewer)
+
+```
+
+First of all we are going to load the data
+
+```{r echo=FALSE, warning=FALSE}
+data <- read.csv("data/data.csv")
+summary(data)
+```
+
+Now that we have data. First of all we going to take a look at each column 
+independently
+
+## Univariant Analysis
+
+### Sex
+
+```{r}
+summary(data$Sex)
+ggplot(aes(x=Sex), data=data)+
+  geom_bar(fill='#555555')
+```
+Here we see that number of female atheletes are less than number of male 
+athletes in olympic.
+
+### Age
+
+We know that there are missing values in our Age, Height and Weight Category
+I am going to leave those values and plot the data that we have.
+
+```{r}
+summary(data$Age)
+ggplot(aes(x=Age), data=data) +
+  geom_histogram(binwidth = 1, color='#ffffff') +
+  scale_x_continuous(breaks = seq(0, 100, 10))
+```
+
+Based on the data available we can say that most of the athletes we have are 
+young, with max altheletes of age 24
+
+### Height
+
+```{r}
+summary(data$Height)
+ggplot(aes(x=Height), data=data) +
+  geom_histogram(binwidth = 1, color='#ffffff') +
+  scale_x_continuous(breaks = seq(0, 250, 10)) +
+  xlab("Heights (cms)")
+```
+
+The distribution of Heights of atheletes is almost normal with some spikes.
+As we can see these spiked values are either at 10s or 5s values These might 
+be because of rounding off the values to nearest multiple of 5.
+
+### Weight
+
+```{r}
+summary(data$Weight)
+ggplot(aes(x=Weight), data=data) +
+  geom_histogram(binwidth = 1, color='#ffffff') +
+  scale_x_continuous(breaks = seq(0, 220, 10))+
+  xlab("Weights (Kgs)")
+```
+The max value for the weiht is 214, but most of the values lie between 
+30 and 130. Again we see spikes at multiples of 10 and small spikes at multiples
+of 5.
+
+### Team
+
+Team is the name of the team athelete belongs to.
+
+```{r}
+length(unique(data$Team))
+```
+
+So we have 1184 total teams in olympics.
+
+```{r}
+x<-sort(table(data$Team),decreasing=T)
+print("Top 10 Team in terms of participation")
+x[1:10]
+
+print("Bottom 50 Team")
+tail(x, n=50)
+
+y<- table(x)
+y
+```
+United states has max number of teams paticiaption followed by Frace and Great
+Britain. But most of the teams has only single participation. We have 103 Teams 
+with single participation, 265 teams with double paricipation and 168 with
+triple.
+
+### Sport
+
+```{r}
+length(unique(data$Sport))
+x<-sort(table(data$Sport), decreasing = T)
+min(x)
+max(x)
+x <- data %>% group_by(Sport) %>% summarise(count=n())
+x$Sport <- factor(x$Sport, levels = x$Sport[order(-x$count)])
+ggplot(aes(x=Sport, y=count), data=x)+
+  geom_bar(width = 0.2, color='#005050', stat="identity")+
+  scale_y_log10()+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+
+  ylab("count (log10 scaled)")
+
+```
+
+In this graph we can see the paticipation of athletes in Sports. Aeronautics has
+the least number of participants ,only 1 and Athletics has maximum number of 
+participants.
+
+
+### Medals
+
+We have three type of medals Gold, Silver and Bronze, If an athlete did not win
+medal then DNW
+
+I am going to plot only the Medal data when the athlete won
+
+```{r}
+data$Won <- ifelse(data$Medal!='DNW', 1, 0)
+data$Medal <- factor(data$Medal, levels = c('Gold', 'Silver', 'Bronze', 'DNW'))
+sum(data$Won)
+ggplot(aes(x=Won), data=data)+
+  geom_bar(fill='#205050') 
+summary(data$Medal)
+```
+
+The number of Gold, Silver and Bronze medals are not same, there is a difference 
+of a few 100s.
+
+## Bivariant Analysis
+
+In this session we are going to take a look at relation between two variables
+
+### Number of Male and Female athlete over the years
+
+We are going to plot how the number of male and female athlete participation 
+changed over the year
+
+```{r}
+
+```
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+ 
