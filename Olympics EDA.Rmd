@@ -1,10 +1,11 @@
 ---
 title: "Olympics EDA"
 output:
-  pdf_document: default
-  html_notebook: default
   html_document:
     df_print: paged
+  html_notebook: default
+  pdf_document: default
+  word_document: default
 editor_options:
   chunk_output_type: console
 ---
@@ -12,42 +13,37 @@ editor_options:
 In this file we are going to explore the data and find out the insights in our 
 data.
 
-```{r echo=FALSE, warning=FALSE}
-
+```{r warning=FALSE, include=FALSE}
+#install.packages("ggplot2")
+#install.packages("dplyr")
+#install.packages("gridExtra")
+#install.packages("reshape2")
 library(ggplot2)
-#library(gridExtra)
 library(dplyr)
-#library(alr3)
-#library(reshape2)
-#library(GGally)
-#library(scales)
-#library(memisc)
-#library(lattice)
-#library(MASS)
-#library(car)
-#library(RColorBrewer)
-
+library(gridExtra)
+library(reshape2)
 ```
 
-First of all we are going to load the data
+First of all we are going to load the data and look at the summary
 
 ```{r echo=FALSE, warning=FALSE}
 data <- read.csv("data/data.csv")
 summary(data)
 ```
 
-Now that we have data. First of all we going to take a look at each column 
+Now that we have data. We are going to take a look at each column 
 independently
 
 ## Univariant Analysis
 
 ### Sex
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 summary(data$Sex)
 ggplot(aes(x=Sex), data=data)+
   geom_bar(fill='#555555')
 ```
+
 Here we see that number of female atheletes are less than number of male 
 athletes in olympic.
 
@@ -56,7 +52,7 @@ athletes in olympic.
 We know that there are missing values in our Age, Height and Weight Category
 I am going to leave those values and plot the data that we have.
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 summary(data$Age)
 ggplot(aes(x=Age), data=data) +
   geom_histogram(binwidth = 1, color='#ffffff') +
@@ -68,7 +64,7 @@ young, with max altheletes of age 24
 
 ### Height
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 summary(data$Height)
 ggplot(aes(x=Height), data=data) +
   geom_histogram(binwidth = 1, color='#ffffff') +
@@ -82,7 +78,7 @@ be because of rounding off the values to nearest multiple of 5.
 
 ### Weight
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 summary(data$Weight)
 ggplot(aes(x=Weight), data=data) +
   geom_histogram(binwidth = 1, color='#ffffff') +
@@ -97,23 +93,22 @@ of 5.
 
 Team is the name of the team athelete belongs to.
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 length(unique(data$Team))
 ```
 
 So we have 1184 total teams in olympics.
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 x<-sort(table(data$Team),decreasing=T)
 print("Top 10 Team in terms of participation")
 x[1:10]
 
-print("Bottom 50 Team")
-tail(x, n=50)
-
 y<- table(x)
-y
+y[1:10]
+
 ```
+
 United states has max number of teams paticiaption followed by Frace and Great
 Britain. But most of the teams has only single participation. We have 103 Teams 
 with single participation, 265 teams with double paricipation and 168 with
@@ -121,11 +116,10 @@ triple.
 
 ### Sport
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
+print("Number of sports")
 length(unique(data$Sport))
 x<-sort(table(data$Sport), decreasing = T)
-min(x)
-max(x)
 x <- data %>% group_by(Sport) %>% summarise(count=n())
 x$Sport <- factor(x$Sport, levels = x$Sport[order(-x$count)])
 ggplot(aes(x=Sport, y=count), data=x)+
@@ -148,7 +142,7 @@ medal then DNW
 
 I am going to plot only the Medal data when the athlete won
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
 data$Won <- ifelse(data$Medal!='DNW', 1, 0)
 data$Medal <- factor(data$Medal, levels = c('Gold', 'Silver', 'Bronze', 'DNW'))
 sum(data$Won)
@@ -169,15 +163,129 @@ In this session we are going to take a look at relation between two variables
 We are going to plot how the number of male and female athlete participation 
 changed over the year
 
-```{r}
+```{r echo=FALSE, warning=FALSE}
+number_of_athletes<-data %>% 
+  group_by(Year, Sex, Season) %>%
+  summarise(number_of_athletes = length(unique(ID)))
+p1<-ggplot(aes(x=Year, y=number_of_athletes), 
+       data=subset(number_of_athletes, Season=='Summer'))+
+  geom_line(aes(color=Sex))+
+  geom_point(aes(color=Sex))+
+  scale_x_continuous(breaks = seq(1896, 2016, 4))+
+  ylab("Number of athletes")+
+  ggtitle("Number of athletes in Summer Games")+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+p2<- ggplot(aes(x=Year, y=number_of_athletes), 
+       data=subset(number_of_athletes, Season=='Winter'))+
+  geom_line(aes(color=Sex))+
+  geom_point(aes(color=Sex))+
+  ylab("Number of athletes")+
+  scale_x_continuous(breaks = c(seq(1896, 1992, 4), seq(1994, 2016, 4)))+
+  ggtitle("Number of athletes in Winter Games")+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+grid.arrange(p1, p2, ncol=1)
+```
+
+In the first Olympics games we have no women athlete. But after that we see a 
+grdual increae in women athlete It is very low in the begining and 
+then we see a big rise in 80s. 
+
+We also have some missin games 1916 summer, 1940-1944 summer and winter.
+These are the times of World wars and the games were cancelled. 
+
+Also there is a shoft in years of winter olympics. In 1994 the winter olympic 
+year moved to 2 years after summer oympics. And before 1924 we didn't have 
+winter olympics.
+
+We see that the gap in number of male and female athletes in descresing over the
+years. 
+
+### Number of countries particiapted
+
+```{r echo=FALSE, warning=FALSE}
+participating_countries <- data %>%
+                        group_by(Year, Season) %>%
+                        summarise(Number_of_countries = length(unique(region)))
+ggplot(aes(x=Year, y=Number_of_countries), data=participating_countries)+
+  geom_line(aes(color=Season))+
+  geom_point(aes(color=Season))+
+  scale_x_continuous(breaks = seq(1896, 2016, 4))+
+  theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+
+  ylab("Number of Countries")
+
+```
+
+Over the years games saw an increse in number of countries. But in year 1980 we
+see a shape decline in summer games. this is the same decline we saw in number 
+of athletes too.
+
+This is because the Soviet Union invaded Afghanistan and 1980 games were held in 
+Soviet Union. United States initiated the boycot of games as a protest against 
+invasion.
+
+### countries and Medals
+
+Now we are going to check if there are any countries that never won any medal 
+at all, won other but never won gold medal, where either men or women never won gold medal.
+
+```{r echo=FALSE, warning=FALSE}
+medal_won <- data %>% group_by(region) %>%
+                    summarise(number_of_medals = sum(Won))
+no_medal <- subset(medal_won, number_of_medals==0)
+print("Countries with no medal")
+no_medal$region
+
+all_medal_data <- data %>% group_by(region, Medal) %>%
+                      summarise(total = n())
+medal_data.wide <- dcast(all_medal_data, region ~ Medal)
+medal_data.wide[is.na(medal_data.wide)] <- 0
+no_gold_data <- subset(medal_data.wide, Gold==0 & Silver>0 & Bronze>0)
+print("Countries with no Gold medal but others")
+no_gold_data$region
+
+all_medal_sex <- data%>% group_by(region, Medal, Sex) %>%
+                         summarise(total = n())
+all_medal_sex.wide <- dcast(all_medal_sex, region ~ Medal+Sex)
+all_medal_sex.wide[is.na(all_medal_sex.wide)] <- 0
+no_women_gold <- subset(all_medal_sex.wide, Gold_F ==0 & Gold_M>0 )
+no_men_gold <- subset(all_medal_sex.wide, Gold_F>0 & Gold_M==0 )
+print("countries where women never won gold medal but men has")
+no_women_gold$region
+print("countries where men never won gold medal but women has")
+no_men_gold$region
 
 ```
 
 
+So we have 72 nations that never won any medal. 11 countries never won a 
+gold medal but they have won others. In 33 countries women never won Gold medals
+but men have. In 8 countries men never won Gold medals but women have.
 
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+## Conclusion
 
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
- 
+1. Number of athletes incresed over the years. During the first year we did not 
+had women athletes but then the numbers increased over the years
+
+2. The number of countries participatin in Olympics also increased, but in year
+1980 because of the boycott.
+
+3. 72 nations never won any medal in Olympics
+
+4. 11 countries never won gold medals but have won others
+
+5. In 33 countries women have never won gold medals but men have 
+
+6. In 8 countries men have never won gold medals but women have 
+
+
+Now that we have these results from our Data Explorarion, I am going to save
+medal data to seaprate files for the visualizations
+
+```{r echo=FALSE, warning=FALSE}
+write.csv(no_men_gold, "data/no_men_gold.csv", row.names = FALSE)
+write.csv(no_women_gold, "data/no_women_gold.csv", row.names = FALSE)
+write.csv(no_gold_data, "data/no_gold.csv", row.names = FALSE)
+write.csv(no_medal, "data/no_medal.csv", row.names = FALSE)
+```
+
