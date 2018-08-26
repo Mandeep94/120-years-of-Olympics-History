@@ -1,6 +1,7 @@
 # 120-years-of-Olympics-History
 
 ## Summary
+The modern Olympic Games or Olympics (French: Jeux olympiques[1][2]) are leading international sporting events featuring summer and winter sports competitions in which thousands of athletes from around the world participate in a variety of competitions. The Olympic Games are considered the world's foremost sports competition with more than 200 nations participating.[3] The Olympic Games are held every four years, with the Summer and Winter Games alternating by occurring every four years but two years apart.
 - in no more than 4 sentences, briefly introduce your data visualization and add any context that can help readers understand it
 
 ## Design 
