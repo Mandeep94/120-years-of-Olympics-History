@@ -1,9 +1,7 @@
 # 120-years-of-Olympics-History
 
 ## Summary
-  The modern Olympic Games or Olympics are 120 years old. The Olympic Games are considered the world's foremost sports competition with more than 200 nations participating. In these visualizations we are going to explore the evolution of these sports, since the beggining in Athens 1896, when the first games were held, till Rio 2016, the latest ones.
-  
-- in no more than 4 sentences, briefly introduce your data visualization and add any context that can help readers understand it
+  The Olympic Games are considered the world's foremost sports competition with more than 200 nations participating. In these visualizations we are going to explore the evolution of these sports, since the beggining in Athens 1896, when the first games were held, till Rio 2016, the latest ones.
 
 ## Design 
 - explain any design choices you made including changes to the visualization after collecting feedback
