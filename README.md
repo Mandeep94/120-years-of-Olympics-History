@@ -1,7 +1,7 @@
 # 120-years-of-Olympics-History
 
 ## Summary
-  The modern Olympic Games or Olympics are leading international sporting events featuring summer and winter sports competitions in which thousands of athletes from around the world participate in a variety of competitions. The Olympic Games are considered the world's foremost sports competition with more than 200 nations participating. The Olympic Games are held every four years, with the Summer and Winter Games alternating by occurring every four years but two years apart.
+  The modern Olympic Games or Olympics are 120 years old. The Olympic Games are considered the world's foremost sports competition with more than 200 nations participating. In these visualizations we are going to explore the evolution of these sports, since the beggining in Athens 1896, when the first games were held, till Rio 2016, the latest ones.
   
 - in no more than 4 sentences, briefly introduce your data visualization and add any context that can help readers understand it
 
