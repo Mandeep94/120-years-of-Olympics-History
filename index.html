@@ -18,7 +18,7 @@
       }
     </style>
 	<script type="text/javascript">
-      function draw(data) {
+      function country_draw(data) {
       /*
         D3.js setup code
       */
@@ -54,14 +54,82 @@
           myChart.draw();
         };
 
+        function summer_athletes_draw(data) {
+          "use strict";
+          var margin = 150,
+              width = 1200 - margin,
+              height = 500 - margin;
+debugger;
 
+          var svg2 = d3.select("body")
+            .append("svg")
+              .attr('class', 'c2')
+              .attr("width", width+margin)
+              .attr("height", height+margin)
+            .append('g')
+              .attr('class', 'chart2');
+          d3.select(".c2")
+            .selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle");
+            var myChart = new dimple.chart(svg2, data);
+          var x = myChart.addTimeAxis("x", "Year"); 
+          var y = myChart.addMeasureAxis("y", "number_of_athletes");
+          x.dateParseFormat = "%Y";
+          x.tickFormat = "%Y";
+          x.timeInterval = 4;
+          y.title="No. of Athletes participated";
+          myChart.addSeries("Sex", dimple.plot.line);
+          myChart.assignColor("M", '#2E86C1');
+          myChart.assignColor("F", '#CB4335');
+          myChart.addSeries("Sex", dimple.plot.scatter);
+          myChart.addLegend(60, 10, 500, 20, "right");
+          myChart.draw();
+        };
+
+        function winter_athletes_draw(data) {
+          "use strict";
+          var margin = 150,
+              width = 1200 - margin,
+              height = 500 - margin;
+debugger;
+
+          var svg3 = d3.select("body")
+            .append("svg")
+              .attr('class', 'c3')
+              .attr("width", width+margin)
+              .attr("height", height+margin)
+            .append('g')
+              .attr('class', 'chart2');
+          d3.select(".c3")
+            .selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle");
+            var myChart = new dimple.chart(svg3, data);
+          var x = myChart.addTimeAxis("x", "Year"); 
+          var y = myChart.addMeasureAxis("y", "number_of_athletes");
+          x.dateParseFormat = "%Y";
+          x.tickFormat = "%Y";
+          x.timeInterval = 4;
+          y.title="No. of Athletes participated";
+          myChart.addSeries("Sex", dimple.plot.line);
+          myChart.assignColor("M", '#2E86C1');
+          myChart.assignColor("F", '#CB4335');
+          myChart.addSeries("Sex", dimple.plot.scatter);
+          myChart.addLegend(60, 10, 500, 20, "right");
+          myChart.draw();
+        };
 
     </script>
 </head>
 <body>
   <h1>120 years of Olympics</h1>
   <script type="text/javascript">
-		d3.csv("data/participating_countries.csv", draw)
+		d3.csv("data/participating_countries.csv", country_draw)
+    d3.csv("data/summer_athletes.csv", summer_athletes_draw)
+    d3.csv("data/winter_athletes.csv", winter_athletes_draw)
 	</script>
 </body>
 </html>
