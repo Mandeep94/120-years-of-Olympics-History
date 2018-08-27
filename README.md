@@ -17,3 +17,5 @@
 [2] Udacity notes
 
 [3] Olympics rings: https://codepen.io/ste-vg/pen/kXzXYW
+
+http://jsbin.com/IrOJOhIg/1/edit?html,js,output
