@@ -2,8 +2,8 @@
 
 ## Summary
   The Olympic Games are considered the world's foremost sports competition with more than 200 nations participating. In these visualizations we are going to explore the evolution of these sports, since the beggining in Athens 1896, when the first games were held, till Rio 2016, the latest ones.
- - Gist link: https://gist.github.com/Mandeep94/e5cfb622b647da0f8004fe636477e65f
- - Visualization: http://bl.ocks.org/Mandeep94/raw/e5cfb622b647da0f8004fe636477e65f/
+ - Gist link: https://gist.github.com/MandyK94/bc33714dfdc67eb5ae737043dc87b53a
+ - Visualization: http://bl.ocks.org/MandyK94/raw/bc33714dfdc67eb5ae737043dc87b53a/
 
 ## Design 
   First I had too many observations from the exploration and I wrote a story but then I realized that this is too long. So I only kept the simple facts for this version and removed everything for next versions. I decided to make author driver narrative and will improve on it in next versions.
